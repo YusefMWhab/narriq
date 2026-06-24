@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% block title %}
+New Job | NarrIQ
+{% endblock %}
+
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/codeFrame_newJob.css' %}">
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/danfojs@1.1.2/lib/bundle.min.js"></script>
+<script src="{% static 'js/codeFrame_newJob.js' %}"></script>
+{% endblock %}
+{% block content %}
+{% csrf_token %}
+<div id="main-container">
+    <div class="card" id="upload-data-card">
+        <div class="card-header">
+            <h3>Upload Dataset</h3>
+            <p class="section-subtitle">Drag and drop files here or paste your open-ended text to upload your dataset.</p>
+        </div>
+
+        <div class="radio-box input-group">
+            <input type="radio" id="paste-text" name="upload-method" value="text" checked>
+            <label for="paste-text">Paste Text</label>
+            <input type="radio" id="upload-file" name="upload-method" value="file">
+            <label for="upload-file">Upload File</label>
+
+        </div>
+
+        <div id="file-upload-section" class="upload-section" style="display: none;">
+            <div class="drop-zone" id="data-drop-zone" onclick="document.getElementById('file-input').click()">
+                <svg class="drop-icon" viewBox="0 0 24 24" fill="none" stroke="#7C6D96" stroke-width="1.5">
+                    <path d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M12 4v12M8 8l4-4 4 4" stroke-linecap="round"
+                        stroke-linejoin="round"></path>
+                </svg>
+                <p class="section-subtitle">Drag &amp; drop your files here <br>XLX, XLSX supported</p>
+
+                <input type="file" id="file-input" style="display:none" accept=".xls,.xlsx">
+                <p class="section-subtitle" id="file-name"></p>
+            </div>
+        </div>
+
+        <div id="text-upload-section" class="upload-section">
+            <textarea id="data-text-input" placeholder="Paste your data here without the header..."></textarea>
+        </div>
+        <div class="button-group">
+            <button id="uploadData-submitBtn" class="btn btn-primary">Upload</button>
+            <button id="uploadData-cancelBtn" class="btn btn-secondary">Clear</button>
+        </div>
+    </div>
+
+    <div class="card" id="mapping-card" style="display: none;">
+        <div class="card-header">
+            <h3>Map Columns</h3>
+            <p class="section-subtitle">Select the columns you want to include in your analysis.</p>
+        </div>
+        <div id="column-mapping-container" class="input-container">
+
+            <div id="project-description">
+                <div id="job-desc-field" class="input-field">
+                    <label for="job-desc-input">Job Description:</label>
+                    <textarea id="job-desc-input" class="user-mapping-textarea"
+                        placeholder="Enter a brief description of the job..."></textarea>
+                </div>
+                <div id="job-category-field" class="input-field">
+                    <label for="job-category-input">Job Category:</label>
+                    <select id="job-category-input" class="user-mapping-select" style="height: 100%;"
+                        placeholder="Enter the category for the job...">
+                        <option value="">Select a category</option>
+                        {% for category in categories %}
+                            <option value="{{ category }}">{{ category }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div id="num-columns-field" class="input-field" style="display: none;">
+                <label for="num-columns-input">Number of Columns:</label>
+                <input type="number" id="num-columns-input" placeholder="Enter number of columns to map" min="1">
+            </div>
+
+            <div id="headers-fields">
+
+            </div>
+        </div>
+
+        <div class="button-group">
+            <button id="mapColumns-submitBtn" class="btn btn-primary">Start Process</button>
+            <button id="mapColumns-cancelBtn" class="btn btn-secondary">Cancel</button>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

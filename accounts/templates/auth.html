@@ -1,0 +1,81 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>NarrIQ | Welcome</title>
+    <meta name="description" content="A dashboard for club management system" />
+    <meta charset="UTF-8" />
+
+    <!--<meta http-equiv="refresh" content="10" />-->
+    <link rel="icon" href="{% static 'images/icon.ico' %}" type="image/x-icon" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/auth.css' %}">
+</head>
+
+<body>
+
+    <div class="error-body">
+        {% if messages %}
+        <div id ="messages-container" class="messages-container">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="auth-body">
+
+        <div class="auth-main-wrapper" id="auth-wrapper">
+
+            <div class="auth-col form-side" id="form-side">
+                <div id="login-section" class="auth-section">
+                    <h2>Login to Workspace</h2>
+                    <br>
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ login_form.as_p }}
+                        <button type="submit" name="login_submit" class="auth-btn">Sign In</button>
+                    </form>
+                </div>
+
+            </div>
+
+            <div class="auth-col info-side" id="info-side">
+                
+                <div class="brand-block">
+                    <span class="brand-tagline">NarrIQ</span>
+                    <span class="brand-tagline">AI-Powered Research Intelligence</span>
+
+                </div>
+
+                <div id="login-info" class="info-content">
+                    <h1>New Here?</h1>
+                    <p>Request access and start automating your data workflows with us.</p>
+                    <button class="ghost-btn" onclick="window.location.href='{% url 'home' %}#contact'">Request Access</button>
+                </div>
+
+                <div id="signup-info" class="info-content" style="display: none;">
+                    <h1>Welcome Back!</h1>
+                    <p>Keep connected with us please login with your personal info.</p>
+                    <button class="ghost-btn" onclick="switchTo('login')">Login</button>
+                </div>
+            </div>
+
+        </div>
+
+        <script>
+            const activeTabFromServer = "{{ active_tab }}";
+        </script>
+        <script src="{% static 'js/auth.js' %}"></script>
+    </div>
+</body>
+
+</html>

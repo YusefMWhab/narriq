@@ -1,0 +1,170 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Job Details | NarrIQ
+{% endblock %}
+
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/codeFrame_job_details.css' %}">
+<link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet">
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
+<script>
+    window.projectAnalysisData = {{ full_result_json|safe }};
+    window.currentJobId = "{{ job.id }}";
+</script>
+
+<script src="{% static 'js/codeFrame_job_details.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+{% csrf_token %}
+
+<div id="main-container">
+    <div class="page-header">
+        <div class="page-header-top">
+            <div>
+                <h3>Analysis Job Overview</h3>
+                <p class="section-subtitle">Job ID: {{ job.id }} | Status: {{ job.get_status_display }}</p>
+            </div>
+            <a href="{% url 'CodeFrame_download_results' job.id %}" class="btn btn-excel">
+            <i class="fa-solid fa-file-excel"></i> Export to Excel
+            </a>
+        </div>
+    </div>
+
+    <div class="kpi-container-grid card-container">
+        <div class="card">
+            <div class="card-icon"><i class="fa-regular fa-file-lines"></i></div>
+            <div class="card-data">
+                <span class="card-value">{{ total_records|default:"0" }}</span>
+                <span class="card-label">Total Records</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-icon"><i class="fa-regular fa-comment"></i></div>
+            <div class="card-data">
+                <span class="card-value">{{ total_responses|default:"0" }}</span>
+                <span class="card-label">Total Responses</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-icon"><i class="fa-solid fa-sitemap"></i></div>
+            <div class="card-data">
+                <span class="card-value" id="totalCodesCounter">{{ total_codes|default:"0" }}</span>
+                <span class="card-label">Extracted Codes</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-icon"><i class="fa-solid fa-chart-line"></i></div>
+            <div class="card-data">
+                <span class="card-value" id="avgCodesCounter">{{ avg_codes_per_response|default:"0" }}</span>
+                <span class="card-label">Avg Codes / Response</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Column Selector -->
+    <div class="selector-container">
+        <div class="form-group">
+            <label for="columnSelect" class="selector-label">Select Column:</label>
+            <select id="columnSelect" class="custom-select">
+                <option value="fullView">Full View (All Columns)</option>
+                {% for col in available_columns %}
+                <option value="{{ col }}">{{ col }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+
+    <div class="codebook-summary-section">
+        <div class="summary-title-bar">
+            <h2><i class="fa-solid fa-chart-column"></i> Codebook Analysis Summary</h2>
+        </div>
+
+        <div class="summary-grid">
+            <div class="summary-card top-highlights-box">
+                <div class="card-sub-header">
+                    <h3><i class="fa-solid fa-arrow-trend-up"></i> Top 10 Ideas in This Question</h3>
+                </div>
+                <div class="card-body">
+                    <div id="top10ChartContainer" class="top-chart-wrapper">
+                    </div>
+                </div>
+            </div>
+
+            <div class="summary-card full-codebook-box">
+                <div class="card-sub-header search-header">
+                    <h3><i class="fa-solid fa-list"></i> Full Code List</h3>
+                    <div class="search-wrapper">
+                        <input type="text" id="codeSearchInput" placeholder="Search for a specific code..."
+                            class="search-input">
+
+                        <button id="CodeListfullscreenToggleBtn" class="fullscreen-btn" title="Toggle Focus Mode">
+                            <i class="fa-solid fa-expand"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body scrollable-codes-container">
+                    <table class="codes-table">
+                        <thead>
+                            <tr>
+                                <th>Code / Idea</th>
+                                <th class="text-center" style="width: 80px;">Frequency</th>
+                                <th style="width: 150px;">Percentage and Distribution</th>
+                                <th class="text-center" style="width: 120px;">
+                                    Actions
+                                <button class="add-code-btn" onclick="CodeBook_triggerAddNewCode()" title="Add new code">
+                                    <i class="fa-solid fa-plus"></i>
+                                </button>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="frequenciesTableBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="responses-section">
+        <div class="summary-title-bar search-header">
+            <h2><i class="fa-solid fa-comment"></i> Details of Consumer Responses and Final Text</h2>
+            <div class="search-wrapper">
+                <label class="filter-toggle">
+                    <input type="checkbox" id="showEmptyToggle">
+                    <span>Untagged only</span>
+                </label>
+                <input type="text" id="responsesSearchInput" placeholder="Search for a specific code..."
+                    class="search-input">
+
+                <button id="ResponsesListfullscreenToggleBtn" class="fullscreen-btn" title="Toggle Focus Mode">
+                    <i class="fa-solid fa-expand"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="summary-card responses-full-box">
+            <div class="card-body scrollable-responses-container">
+                <table class="responses-table">
+                    <thead id="responsesTableHeader">
+                    </thead>
+                    <tbody id="responsesTableBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="focus-overlay" id="focusOverlay"></div>
+
+{% endblock %}

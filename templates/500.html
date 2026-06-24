@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>500 — Server Error | NarrIQ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #080614;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 24px;
+    }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(239,68,68,.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .error-page { text-align: center; }
+
+    .error-num {
+      font-family: 'Sora', sans-serif;
+      font-size: clamp(7rem, 18vw, 11rem);
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -4px;
+      background: linear-gradient(135deg, #EF4444, #F97316);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 8px;
+    }
+
+    .error-line {
+      width: 40px; height: 2px;
+      background: linear-gradient(90deg, #EF4444, #F97316);
+      border-radius: 2px;
+      margin: 0 auto 24px;
+    }
+
+    .error-title {
+      font-family: 'Sora', sans-serif;
+      font-size: 1.3rem; font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .error-sub {
+      font-size: .95rem; color: #7C6D96;
+      line-height: 1.7; max-width: 380px;
+      margin: 0 auto 36px;
+    }
+
+    .error-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 28px; border-radius: 10px;
+      background: linear-gradient(135deg, #6B21E8, #2B7FFF);
+      color: #fff; font-size: .9rem; font-weight: 600;
+      text-decoration: none;
+      transition: opacity .2s, transform .2s;
+      box-shadow: 0 8px 28px rgba(107,33,232,.3);
+    }
+    .error-btn:hover { opacity: .88; transform: translateY(-2px); }
+  </style>
+</head>
+<body>
+  <div class="error-page">
+    <div class="error-num">500</div>
+    <div class="error-line"></div>
+    <div class="error-title">Internal Server Error</div>
+    <div class="error-sub">Something went wrong on our end. We're working to fix it — please try again in a moment.</div>
+    <a href="#" onclick="history.back(); return false;" class="error-btn">← Back</a>
+  </div>
+</body>
+</html>

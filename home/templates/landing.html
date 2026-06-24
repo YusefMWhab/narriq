@@ -1,0 +1,404 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NarrIQ — AI-Powered Research Intelligence</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=DM+Sans:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/landing.css' %}">
+    <link rel="icon" href="{% static 'images/icon.ico' %}" type="image/x-icon" />
+    <script src="{% static 'js/landing.js' %}"></script>
+</head>
+
+<body>
+
+    <div class="error-body">
+        <div id="django-messages" class="messages-container">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{% if message.tags == 'error' %}error{% else %}{{ message.tags }}{% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- NAV -->
+    <nav>
+        <a href="#" class="nav-brand">
+            <img id="nav-logo-img" src="{% static 'images/logo_icon.png' %}" alt="NarrIQ Logo">
+            NarrIQ
+        </a>
+        
+        <div class="nav-links" id="nav-links-menu">
+            <a href="#features">Features</a>
+            <a href="#how">How it works</a>
+            <a href="#pricing">Pricing</a>
+            <a href="#contact">Contact</a>
+            <div class="nav-buttons">
+                <a href="{% url 'auth_page' %}" class="nav-cta login-btn">Get Started</a>
+            </div>
+        </div>
+        <button class="menu-toggle" id="mobile-menu-btn">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-badge"><span></span> AI-Powered Research Intelligence</div>
+        <h1>Turn Raw Responses Into<br><em>Actionable Intelligence</em></h1>
+        <p>NarrIQ automates the coding of open-ended survey responses at scale — giving market research teams 10× faster
+            insights with AI precision.</p>
+        <div class="hero-btns">
+            <a href="#contact" class="btn-primary">Start Free Trial</a>
+            <a href="#how" class="btn-ghost">See How It Works</a>
+        </div>
+
+        <div class="hero-visual">
+            <div class="mock-window">
+                <div class="mock-bar">
+                    <div class="mock-dot"></div>
+                    <div class="mock-dot"></div>
+                    <div class="mock-dot"></div>
+                </div>
+                <div class="mock-body">
+                    <div class="mock-sidebar">
+                        <div class="mock-nav-item active"></div>
+                        <div class="mock-nav-item"></div>
+                        <div class="mock-nav-item"></div>
+                        <div class="mock-nav-item"></div>
+                    </div>
+                    <div class="mock-content">
+                        <div class="mock-cards">
+                            <div class="mock-card">
+                                <div class="mock-card-val">2.4K</div>
+                                <div class="mock-card-lbl"></div>
+                            </div>
+                            <div class="mock-card">
+                                <div class="mock-card-val">98%</div>
+                                <div class="mock-card-lbl"></div>
+                            </div>
+                            <div class="mock-card">
+                                <div class="mock-card-val">47</div>
+                                <div class="mock-card-lbl"></div>
+                            </div>
+                            <div class="mock-card">
+                                <div class="mock-card-val">1.2s</div>
+                                <div class="mock-card-lbl"></div>
+                            </div>
+                        </div>
+                        <div class="mock-chart">
+                            <div class="mock-bar-row">
+                                <div class="mock-bar-lbl"></div>
+                                <div class="mock-bar-track">
+                                    <div class="mock-bar-fill" style="width:82%"></div>
+                                </div>
+                            </div>
+                            <div class="mock-bar-row">
+                                <div class="mock-bar-lbl"></div>
+                                <div class="mock-bar-track">
+                                    <div class="mock-bar-fill" style="width:64%"></div>
+                                </div>
+                            </div>
+                            <div class="mock-bar-row">
+                                <div class="mock-bar-lbl"></div>
+                                <div class="mock-bar-track">
+                                    <div class="mock-bar-fill" style="width:51%"></div>
+                                </div>
+                            </div>
+                            <div class="mock-bar-row">
+                                <div class="mock-bar-lbl"></div>
+                                <div class="mock-bar-track">
+                                    <div class="mock-bar-fill" style="width:38%"></div>
+                                </div>
+                            </div>
+                            <div class="mock-bar-row">
+                                <div class="mock-bar-lbl"></div>
+                                <div class="mock-bar-track">
+                                    <div class="mock-bar-fill" style="width:27%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- LOGOS -->
+    <div class="logos-strip">
+        <p>The Future of AI Research Starts Here</p>
+        <div class="logos-row">
+            <div class="logo-pill">BE OUR FIRST PARTNER</div>
+        </div>
+    </div>
+
+    <!-- FEATURES -->
+    <section class="section" id="features">
+        <div class="section-label">Features</div>
+        <div class="section-title">Everything you need to<br>decode consumer voices</div>
+        <div class="section-sub">From raw verbatims to structured codebooks — NarrIQ handles the entire pipeline so your
+            team can focus on insights.</div>
+
+        <div class="features-grid">
+            <div class="feat-card">
+                <div class="feat-icon">🧠</div>
+                <h3>AI Codebook Generation</h3>
+                <p>Our engine reviews your dataset and automatically constructs a unified, project-wide codebook —
+                    consolidating themes, concepts, and ideas in seconds.</p>
+            </div>
+            <div class="feat-card">
+                <div class="feat-icon">⚡</div>
+                <h3>Bulk Response Tagging</h3>
+                <p>Process thousands of open-ended responses simultaneously. Each verbatim gets tagged with the relevant
+                    codes from your codebook instantly.</p>
+            </div>
+            <div class="feat-card">
+                <div class="feat-icon">✏️</div>
+                <h3>Inline Code Editing</h3>
+                <p>Review, rename, merge, or delete codes directly from the dashboard. Changes reflect across all
+                    responses in real-time — no re-processing needed.</p>
+            </div>
+            <div class="feat-card">
+                <div class="feat-icon">📊</div>
+                <h3>Interactive Analytics</h3>
+                <p>Visual frequency charts, distribution tables, and searchable codebooks. Drill down into any column or
+                    brand instantly with one click.</p>
+            </div>
+            <div class="feat-card">
+                <div class="feat-icon">📁</div>
+                <h3>Flexible Data Ingestion</h3>
+                <p>Upload Excel files with multiple columns or paste raw text directly. NarrIQ adapts to your data
+                    structure — no formatting required.</p>
+            </div>
+            <div class="feat-card">
+                <div class="feat-icon">📥</div>
+                <h3>One-Click Excel Export</h3>
+                <p>Export your full coded dataset as a clean Excel file, ready to merge with your raw data and share
+                    with clients or stakeholders.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="how-section" id="how">
+        <div style="text-align:center;margin-bottom:64px;">
+            <div class="section-label">How It Works</div>
+            <div class="section-title">From upload to insight<br>in 3 simple steps</div>
+        </div>
+        <div class="steps">
+            <div class="step">
+                <div class="step-num">1</div>
+                <h3>Upload Your Data</h3>
+                <p>Upload your Excel file or paste raw verbatims. Describe each column's context so the AI understands
+                    your research intent.</p>
+            </div>
+            <div class="step">
+                <div class="step-num">2</div>
+                <h3>AI Builds the Codebook</h3>
+                <p>NarrIQ analyzes a representative sample and automatically generates a unified, structured codebook
+                    covering all key themes.</p>
+            </div>
+            <div class="step">
+                <div class="step-num">3</div>
+                <h3>Review & Export</h3>
+                <p>Fine-tune codes inline, explore frequency analytics, then export the fully coded dataset as a clean
+                    Excel file.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- STATS -->
+    <div class="stats-section">
+        <div class="stat-item">
+            <div class="stat-val">20×</div>
+            <div class="stat-lbl">Faster than manual coding</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-val">95%</div>
+            <div class="stat-lbl">Coding accuracy rate</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-val">Unlimited</div>
+            <div class="stat-lbl">Responses processed daily</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-val">zero</div>
+            <div class="stat-lbl">Data sold or shared</div>
+        </div>
+    </div>
+
+    <!-- PRICING -->
+    <section class="section" id="pricing" style="text-align:center;">
+        <div class="section-label">Pricing</div>
+        <div class="section-title" style="margin:0 auto 12px;">Simple, transparent pricing</div>
+        <div class="section-sub" style="margin:0 auto 56px;">Pay per what you use. No hidden fees. Cancel anytime.</div>
+
+        <div class="pricing-grid">
+
+            <div class="price-card">
+                <div class="price-card-data">
+                    <div class="price-name">Pilot Trial</div>
+                    <div class="price-val">$0</div>
+                    <div class="price-desc">One-time free trial for pilot projects and evaluation purposes</div>
+                    <ul class="price-features">
+                        <li>1,000 responses included</li>
+                        <li>Up to 3 users</li>
+                        <li>Excel export</li>
+                        <li>Email support</li>
+                        <li>One-time pilot access</li>
+                    </ul>
+                </div>
+                <a href="#contact" class="price-btn outline">Contact Sales</a>
+            </div>
+
+            <div class="price-card featured" >
+                <div class="price-card-data">
+                    <div class="price-name">Starter</div>
+                    <div class="price-val">$49 <span>/ month</span></div>
+                    <div class="price-desc">Perfect for small teams and projects</div>
+                    <ul class="price-features">
+                        <li>5,000 responses / month</li>
+                        <li>Up to 5 users</li>
+                        <li>Excel export</li>
+                        <li>Email support</li>
+                    </ul>
+                </div>
+                <a href="#contact" class="price-btn outline">Contact Sales</a>
+            </div>
+
+            <div class="price-card ">
+                <div class="price-card-data">
+                    <div class="price-name">Professional</div>
+                    <div class="price-val">$199 <span>/ month</span></div>
+                    <div class="price-desc">For growing research agencies</div>
+                    <ul class="price-features">
+                        <li>25,000 responses / month</li>
+                        <li>Up to 15 users</li>
+                        <li>Excel export</li>
+                        <li>Priority support</li>
+                        <li>Custom codebook templates</li>
+                    </ul>
+                </div>
+                <a href="#contact" class="price-btn outline">Contact Sales</a>
+            </div>
+
+            <div class="price-card">
+                <div class="price-card-data">
+                    <div class="price-name">Enterprise</div>
+                    <div class="price-val">Custom</div>
+                    <div class="price-desc">For large agencies with high volume needs</div>
+                    <ul class="price-features">
+                        <li>Everything in Starter + Pro</li>
+                        <li>Custom research workflows</li>
+                        <li>Industry-specific AI modules</li>
+                        <li>Advanced integrations (CRM, APIs)</li>
+                        <li>Priority support</li>
+                    </ul>
+                </div>
+                <a href="#contact" class="price-btn outline">Contact Sales</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="contact-section" id="contact">
+        <div class="contact-grid">
+            <div class="contact-info">
+                <div class="section-label">Contact</div>
+                <h2>Let's talk about your research needs</h2>
+                <p>Whether you're ready to start a trial or want to learn more about enterprise options — we'd love to
+                    hear from you.</p>
+                <div class="contact-item">
+                    <div class="contact-icon">📧</div>
+                    <div class="contact-item-text">
+                        <strong>Email</strong>
+                        <span>hello@narriq.ai</span>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">💬</div>
+                    <div class="contact-item-text">
+                        <strong>Response time</strong>
+                        <span>Within 24 business hours</span>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">🌍</div>
+                    <div class="contact-item-text">
+                        <strong>Serving</strong>
+                        <span>MENA, Europe & Global</span>
+                    </div>
+                </div>
+            </div>
+
+            <form class="contact-form" action="{% url 'contact' %}" method="post">
+                {% csrf_token %}
+                <div class="form-row">
+                    <div class="field"><label>First Name</label><input type="text" name="first_name" placeholder="Ahmed" required></div>
+                    <div class="field"><label>Last Name</label><input type="text" name="last_name" placeholder="Hassan" required></div>
+                </div>
+                <div class="field"><label>Company</label><input type="text" name="company" placeholder="Your research agency" required></div>
+                <div class="field"><label>Email</label><input type="email" name="email" placeholder="ahmed@agency.com" required></div>
+                <div class="field">
+                    <label>I'm interested in</label>
+                    <select name="interest" required>
+                        <option value="">Select an option</option>
+                        <option value="Pilot Trial">Starting a pilot trial</option>
+                        <option value="Starter Plan">Starter plan</option>
+                        <option value="Professional Plan">Professional plan</option>
+                        <option value="Enterprise">Enterprise</option>
+                        <option value="General Inquiry">General inquiry</option>
+                    </select>
+                </div>
+                <div class="field"><label>Message</label><textarea name="message" placeholder="Tell us about your project or research needs..." required></textarea></div>
+                <button type="submit" class="btn-primary" style="border:none;cursor:pointer;">Send Message</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- CTA BANNER -->
+    <section class="cta-banner">
+        <h2>Ready to transform your<br>research workflow?</h2>
+        <p>Join hundreds of research professionals already using NarrIQ.</p>
+        <a href="#contact" class="btn-primary">Contact Sales</a>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-top">
+            <div>
+                <div class="footer-brand-name">NarrIQ</div>
+                <div class="footer-tagline">AI-powered research intelligence for modern market research teams.</div>
+            </div>
+            <div class="footer-col">
+                <h4>Product</h4>
+                <a href="#features">Features</a>
+                <a href="#how">How it works</a>
+                <a href="#pricing">Pricing</a>
+            </div>
+            <div class="footer-col">
+                <h4>Company</h4>
+                <a href="#">About</a>
+                <a href="#contact">Contact</a>
+            </div>
+            
+        </div>
+        <div class="footer-bottom">
+            <span>© 2026 NarrIQ. All rights reserved.</span>
+            <span>Built for market researchers, by researchers.</span>
+        </div>
+    </footer>
+
+</body>
+
+</html>

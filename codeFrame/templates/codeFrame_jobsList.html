@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}
+My Jobs | NarrIQ
+{% endblock %}
+
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/codeFrame_jobsList.css' %}">
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/codeFrame_jobsList.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+
+<div id="main-container">
+    <div class="page-header">
+        <h3>My Analysis Jobs</h3>
+        <p class="section-subtitle">Overview of your submitted analysis jobs and their statuses.</p>
+    </div>
+    
+    <table id="jobs-table">
+        <thead>
+            <tr>
+                <th>Created At</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for job in jobs %}
+            <tr id="job-{{ job.id }}">
+                <td>{{ job.created_at|date:"d M, H:i" }}</td>
+                <td>
+                    <span class="badge {% if job.status == 'completed' %}success{% elif job.status == 'processing' %}primary{% elif job.status == 'failed' %}danger{% else %}secondary{% endif %}">
+                        {{ job.status|title }}
+                    </span>
+                </td>
+                <td>
+                    {% if job.status == 'completed' %}
+                        <a href="{% url 'CodeFrame_details' job.id %}" class="btn-view">View Results</a>
+                    {% else %}
+                        <button class="btn-waiting" disabled>Waiting</button>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

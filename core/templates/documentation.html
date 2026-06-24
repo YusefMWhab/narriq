@@ -1,0 +1,160 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Documentation | NarrIQ
+{% endblock %}
+
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/documentation.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="doc-page-wrapper">
+    
+    <aside class="doc-sidebar">
+        <div class="sidebar-sticky-content">
+            <h3 class="sidebar-title"><i class="fa-solid fa-map-pin"></i> Guide Index</h3>
+            <ul class="sidebar-links">
+                <li><a href="#welcome" class="active"><i class="fa-solid fa-handshake"></i> Welcome to NarrIQ</a></li>
+                <li><a href="#excel-spec"><i class="fa-solid fa-file-excel"></i> Data Ingestion Modes</a></li>
+                <li><a href="#ai-engine"><i class="fa-solid fa-brain"></i> How the AI Engine Works</a></li>
+                <li><a href="#dashboard-guide"><i class="fa-solid fa-chart-bar"></i> Dashboard Guide</a></li>
+                <li><a href="#faqs"><i class="fa-solid fa-question-circle"></i> FAQs</a></li>
+            </ul>
+        </div>
+    </aside>
+
+    <div class="doc-content">
+        
+        <section id="welcome" class="doc-section">
+            <div class="section-header">
+                <h1><i class="fa-solid fa-handshake"></i> Welcome to NarrIQ</h1>
+                <p class="subtitle">Your comprehensive guide to understanding and using the smart market research analysis system.</p>
+            </div>
+            <p class="paragraph">
+                <strong>NarrIQ</strong> is engineered to empower market researchers and data analysts to decode open-ended textual responses at lightning speed with maximum precision. The system converts thousands of raw, unstructured verbatim comments into a **unified, thoroughly calculated Codebook** that is easy to interpret and filter.
+            </p>
+        </section>
+
+        <section id="excel-spec" class="doc-section">
+            <h2><i class="fa-solid fa-file-excel"></i> Project Setup & Data Ingestion Modes</h2>
+            <p class="paragraph">
+                NarrIQ offers maximum flexibility. You don't need to format or rename your Excel columns before uploading. The platform dynamically adapts to your data configuration through two powerful ingestion modes:
+            </p>
+            
+            <div class="mode-container">
+                <h3 class="mode-title">🔹 Mode 1: Dynamic Excel Upload Workflow</h3>
+                <div class="spec-box">
+                    <ul class="spec-list">
+                        <li><strong>Project Metadata:</strong> Start by providing a concise project description <em>(strictly under 10 words)</em> to prime the AI core.</li>
+                        <li><strong>Define Scope:</strong> Enter the exact number of target columns you want to analyze from your file.</li>
+                        <li><strong>Dynamic Context Mapping:</strong> The interface will instantly generate a <code>Dropdown Selector</code> and a <code>Context Field</code> for each column. Simply map the original column name, and quickly describe the product and question nature to guide the AI's understanding.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="mode-container" style="margin-top: 24px;">
+                <h3 class="mode-title">🔹 Mode 2: Direct Copy & Paste (No File Required)</h3>
+                <div class="spec-box" style="border-left-color: #3b82f6;">
+                    <ul class="spec-list">
+                        <li><strong>Raw Verbatims Field:</strong> If you don't have an organized file, simply copy the raw data column from any source (excluding the header) and paste it directly into the provided large text field.</li>
+                        <li><strong>Contextual Grounding:</strong> Input your project intent and specific question context alongside the pasted text so the AI can build a highly accurate custom Codebook.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="ai-engine" class="doc-section">
+            <h2><i class="fa-solid fa-brain"></i> How the AI Engine Works (Understanding the Output)</h2>
+            <p class="paragraph">The engine processes data in two main architectural phases to guarantee statistical integrity:</p>
+            
+            <div class="steps-container">
+                <div class="step-item">
+                    <span class="step-number">1</span>
+                    <h4>Building the Unified Codebook</h4>
+                    <p>The AI reviews a representative sample across all uploaded columns to construct a single, standardized project-wide Codebook. This consolidates all potential customer themes, concepts, and ideas (e.g., Price, Quality, Packaging).</p>
+                </div>
+                <div class="step-item">
+                    <span class="step-number">2</span>
+                    <h4>Response Tagging</h4>
+                    <p>The AI processes each consumer response individually, mapping it against the unified project Codebook, and extracts the corresponding <code>Final IDs</code> and <code>Final Text</code> into responsive visual badges.</p>
+                </div>
+            </div>
+
+        </section>
+
+        <section id="dashboard-guide" class="doc-section">
+            <h2><i class="fa-solid fa-chart-bar"></i> Interactive Dashboard Guide</h2>
+            <p class="paragraph">The Job Overview interface consists of three core components structurally designed for optimal data tracking:</p>
+            <table class="doc-table">
+                <thead>
+                    <tr>
+                        <th>Visual Component</th>
+                        <th>Functionality & Analytical Purpose</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Question Dropdown</strong></td>
+                        <td>Allows you to switch instantaneously between different brands, loops, or flavors. The system immediately recalculates frequencies and percentages for that specific column based on the master project Codebook.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Top 10 Highlights Chart</strong></td>
+                        <td>Displays the highest-ranking ideas and dominant trends mentioned by consumers in the selected question at a single glance.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Full Codebook Table</strong></td>
+                        <td>Contains all evaluated codes and their distribution metrics, seamlessly integrated with an <em>instant search filter</em> that cleans the rows as you type.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Code Management Actions</strong></td>
+                        <td>Provides full CRUD control over your data: <em>Edit</em> labels, <em>Merge</em> multiple codes into one, or <em>Delete</em> redundant entries. Changes sync instantly across all consumer responses without the need for re-processing.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id="faqs" class="doc-section">
+            <h2><i class="fa-solid fa-question-circle"></i> Frequently Asked Questions (FAQs)</h2>
+            
+            <div class="faq-item">
+                <h4>Q: Is my uploaded data secure and private?</h4>
+                <p>Yes, absolutely. All datasets are processed through secure corporate APIs adhering to industry-standard encryption practices. Data access is strictly restricted to authorized project owners within your NarrIQ workspace.</p>
+            </div>
+
+            <div class="faq-item">
+                <h4>Q: Does the system support multiple open-ended columns simultaneously?</h4>
+                <p>Yes. The platform seamlessly handles Excel files with multiple open-ended textual columns. You can map, configure contexts, and toggle metrics for each column dynamic through the project dashboard.</p>
+            </div>
+
+            <div class="faq-item">
+                <h4>Q: Can I manually review and edit the AI-generated codes?</h4>
+                <p>Yes, this is a core feature. NarrIQ operates on a "Human-in-the-Loop" architecture. You can click and edit any code name directly in the dynamic table, and the changes will instantaneously sync with the database and update all corresponding verbatims across the screen.</p>
+            </div>
+
+            <div class="faq-item">
+                <h4>Q: What export formats are supported?</h4>
+                <p>Currently, the platform strictly supports exporting processed results back into fully populated <strong>Excel (.xlsx) files</strong> for clean data merging. However, our architecture is modular, and custom formats (such as SPSS .sav or CSV) can be seamlessly integrated upon enterprise client request.</p>
+            </div>
+
+            <div class="faq-item">
+                <h4>Q: How long does the AI analysis take?</h4>
+                <p>Processing time varies based on dataset volume and response complexity. Standard files are processed within hours. For massive enterprise-grade datasets, processing runs asynchronously in the background so you can close the page and return later.</p>
+            </div>
+
+            <div class="faq-item">
+                <h4>Q: Can I run multiple text analysis jobs at the same time?</h4>
+                <p>Yes. The backend utilizes asynchronous worker queues to handle multiple processing jobs concurrently, ensuring zero downtime and no user interface blocking.</p>
+            </div>
+
+            <div class="faq-item">
+                <h4>Q: Is the coding pipeline fully autonomous?</h4>
+                <p>No, it is AI-assisted. The engine does the heavy lifting by analyzing and structuring 90%+ of the data, leaving final quality assurance, naming refinements, and strategic alignment entirely under human supervision.</p>
+            </div>
+        </section>
+
+    </div>
+</div>
+{% endblock %}

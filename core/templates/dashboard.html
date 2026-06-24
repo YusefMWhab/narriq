@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Dashboard | NarrIQ
+{% endblock %}
+
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+{% endblock %}
+
+{% block content %}
+<div id="main-container">
+
+    <div class="page-header">
+        <h2>Welcome to NarrIQ</h2>
+        <p class="section-subtitle">Here's an overview of your activity and company quota</p>
+        <span class="company-badge">
+            <i class="fa-solid fa-building" style="margin-right: 4px;"></i> {{ request.user.profile.company.name }}
+        </span>
+    </div>
+
+    <div class="section-label">Your Activity</div>
+    <div class="card-container" id="user-cards">
+
+        <div class="card">
+            <div class="card-icon"><i class="fa-solid fa-briefcase"></i></div>
+            <div class="card-data">
+                <span class="card-value">{{ user_jobs_count|default:"0" }}</span>
+                <span class="card-label">My Total Jobs</span>
+                <span class="card-sub">Analysis requests submitted by you</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-icon"><i class="fa-regular fa-file-lines"></i></div>
+            <div class="card-data">
+                <span class="card-value">{{ user_total_records|default:"0" }}</span>
+                <span class="card-label">Total Records</span>
+                <span class="card-sub">Total records across all your jobs</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-icon"><i class="fa-regular fa-comment"></i></div>
+            <div class="card-data">
+                <span class="card-value">{{ user_total_responses|default:"0" }}</span>
+                <span class="card-label">Total Responses</span>
+                <span class="card-sub">Number of responses analyzed</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-icon"><i class="fa-solid fa-sitemap"></i></div>
+            <div class="card-data">
+                <span class="card-value">{{ user_total_codes|default:"0" }}</span>
+                <span class="card-label">Extracted Codes</span>
+                <span class="card-sub">Codes extracted from all jobs</span>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="section-label">Company Quota</div>
+    <div class="card-container" id="company-cards">
+
+        <div class="card quota-card">
+            <div style="display:flex;align-items:flex-start;gap:16px">
+                <div class="card-icon"><i class="fa-solid fa-building"></i></div>
+                <div class="card-data">
+                    <span class="card-value">{{ used_responses|default:"0" }}</span>
+                    <span class="card-label">Company Quota Usage</span>
+                    <span class="card-sub">Responses used out of total plan quota</span>
+                </div>
+            </div>
+            <div class="quota-bar-track">
+                <div class="quota-bar-fill" style="width: {{ quota_pct|default:'0' }}%"></div>
+            </div>
+            <div class="quota-meta">
+                <span>{{ used_responses|default:"0" }} used</span>
+                <span class="quota-pct">{{ quota_pct|default:"0" }}%</span>
+                <span>{{ allowed_responses|default:"0" }} total</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-icon"><i class="fa-solid fa-gauge-high"></i></div>
+            <div class="card-data">
+                <span class="card-value" style="color:#6EE7B7">{{ remaining_responses|default:"0" }}</span>
+                <span class="card-label">Remaining</span>
+                <span class="card-sub">Responses still available in your plan</span>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-icon"><i class="fa-regular fa-calendar-days"></i></div>
+            <div class="card-data">
+                <span class="card-value" style="color: #A78BFA;">
+                    {{ valid_until|date:"M d, Y"|default:"Unlimited" }}
+                </span>
+                <span class="card-label">Valid Until</span>
+                <span class="card-sub">Your current plan expiration date</span>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

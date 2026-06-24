@@ -1,0 +1,43 @@
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+      - redis
+    env_file:
+      - .env
+    environment:
+      - PYTHONUNBUFFERED=1
+      - DEBUG=False
+    command: >
+      sh -c "until pg_isready -h db -p 5432; do sleep 1; done &&
+            python manage.py migrate &&
+            python manage.py runserver 0.0.0.0:8000"
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+    ports:
+      - "5433:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+  redis:
+    image: redis:7
+  celery_default:
+    build: .
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: celery -A config worker -Q default -l info
+    volumes:
+      - .:/app
+    depends_on:
+      - redis
+      - web
+volumes:
+  db_data:

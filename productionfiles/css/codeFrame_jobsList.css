@@ -1,0 +1,85 @@
+#jobs-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    font-family: var(--primary-font);
+}
+
+#jobs-table thead tr {
+    border-bottom: 1px solid var(--border-color);
+}
+
+#jobs-table th {
+    text-align: left;
+    padding: 10px 14px;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+#jobs-table tbody tr {
+    border-bottom: 1px solid var(--border-color);
+    transition: background 0.15s;
+}
+
+#jobs-table tbody tr:hover {
+    background: rgba(124, 58, 237, 0.07);
+}
+
+#jobs-table td {
+    padding: 13px 14px;
+    color: var(--text-body);
+}
+
+/* Badges */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.badge::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+.badge.success  { background: rgba(34, 197, 94, 0.12);  color: var(--success); }
+.badge.primary  { background: rgba(167,139,250, 0.12); color: var(--text-accent); }
+.badge.danger   { background: rgba(239, 68, 68, 0.12);  color: var(--error); }
+.badge.secondary { background: rgba(156,163,175, 0.1);  color: var(--text-body); }
+
+/* Buttons */
+.btn-view {
+    display: inline-block;
+    padding: 5px 14px;
+    background: var(--btn-primary-bg);
+    color: var(--btn-primary-text);
+    font-size: 12px;
+    font-weight: 500;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: opacity 0.15s;
+}
+
+.btn-view:hover { opacity: 0.85; }
+
+.btn-waiting {
+    display: inline-block;
+    padding: 5px 14px;
+    background: var(--btn-secondary-bg);
+    color: var(--text-muted);
+    font-size: 12px;
+    font-weight: 500;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+    cursor: not-allowed;
+}
