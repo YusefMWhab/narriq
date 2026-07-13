@@ -12,7 +12,7 @@ from datetime import datetime
 from django.utils import timezone
 from django.db import transaction
 from codeFrame.models import CodeFrame_AnalysisJob, CodeFrame_AnalysisResult, CodeFrame_CompanyUsageQuota
-from codeFrame.loaders.prompts_loader import get_all_categories
+from codeFrame.loaders.loader import get_fieldRegion, get_outputLanguageOptions, get_dialect_by_region
 from codeFrame.services.FileManager import CodeFrame_ExportData
 from codeFrame.utils import CodeFrame_CreateJob
 # Create your views here.
@@ -20,11 +20,13 @@ from codeFrame.utils import CodeFrame_CreateJob
 # View to render the new job form
 def codeFrame_newJob(request):
 
-    categories = get_all_categories()
+    fieldRigon = get_fieldRegion()
+    outputLanguage = get_outputLanguageOptions()
     
 
     context = {
-        "categories": categories
+        "regions": fieldRigon,
+        "outputLanguage": outputLanguage
     }
 
     return render(request, 'codeFrame_newJob.html', context)
@@ -36,7 +38,9 @@ def codeFrame_create_job(request):
         try:
             data_file = request.FILES.get("dataFile")
             method = request.POST.get("method")
-            project_category = request.POST.get("projectCategory")
+            project_fieldRegion = request.POST.get("projectFieldRegion")
+            project_language = get_dialect_by_region(project_fieldRegion)
+            project_resultLanguage = request.POST.get("projectResultLanguage")
             project_description = request.POST.get("projectDescription")
 
             # JSON string → object
@@ -113,7 +117,15 @@ def codeFrame_create_job(request):
             )
 
             # Start processing the job
-            CodeFrame_CreateJob(temp_path, method, project_category, project_description, user_mapping, request.user.id)
+            CodeFrame_CreateJob(
+                temp_path, 
+                method, 
+                project_language, 
+                project_resultLanguage, 
+                project_description, 
+                user_mapping, 
+                request.user.id
+            )
             
 
             return JsonResponse({
@@ -499,8 +511,6 @@ def codeFrame_update_dataset(request):
         return JsonResponse({'status': 'error', 'message': 'Job not found or unauthorized.'}, status=404)
     except Exception as e:
         return JsonResponse({'status': 'error', 'message': f'Server Error: {str(e)}'}, status=500)
-
-
 
 # View to download results as Excel
 def codeFrame_download_results(request, job_id):

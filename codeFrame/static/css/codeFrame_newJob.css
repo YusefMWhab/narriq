@@ -167,8 +167,13 @@ input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; }
   background-repeat: no-repeat;
   background-position: right 14px center;
 }
-.user-mapping-select:focus { border-color: #5B21B6; }
 
+ user-mapping-select:focus { border-color: #5B21B6; }
+
+ .user-mapping-select option:checked {
+    box-shadow: 0 0 0 100px #1a6fd4 inset !important;
+    color: white !important;
+ }
 /* Mapping row */
 .file-mapping-row {
   display: grid;

@@ -6,3 +6,6 @@ db.sqlite3
 /.venv/
 /env/
 .DS_Store
+media/
+*.xlsx
+gemini_output.json

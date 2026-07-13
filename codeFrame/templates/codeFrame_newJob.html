@@ -12,6 +12,7 @@ New Job | NarrIQ
 
 {% block extra_js %}
 <script src="https://cdn.jsdelivr.net/npm/danfojs@1.1.2/lib/bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="{% static 'js/codeFrame_newJob.js' %}"></script>
 {% endblock %}
 {% block content %}
@@ -62,17 +63,27 @@ New Job | NarrIQ
 
             <div id="project-description">
                 <div id="job-desc-field" class="input-field">
-                    <label for="job-desc-input">Job Description:</label>
+                    <label for="job-desc-input">project Description:</label>
                     <textarea id="job-desc-input" class="user-mapping-textarea"
-                        placeholder="Enter a brief description of the job..."></textarea>
+                        placeholder="Enter a brief description of the project..."></textarea>
                 </div>
-                <div id="job-category-field" class="input-field">
-                    <label for="job-category-input">Job Category:</label>
-                    <select id="job-category-input" class="user-mapping-select" style="height: 100%;"
-                        placeholder="Enter the category for the job...">
-                        <option value="">Select a category</option>
-                        {% for category in categories %}
-                            <option value="{{ category }}">{{ category }}</option>
+                <div id="job-regionField-field" class="input-field">
+                    <label for="job-regionField-input">Field Region:</label>
+                    <select id="job-regionField-input" class="user-mapping-select" style="height: 100%;"
+                        placeholder="Enter the region field for the job...">
+                        <option value="">Select a Region</option>
+                        {% for region in regions %}
+                            <option value="{{ region }}">{{ region }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div id="job-outputLanguage-field" class="input-field">
+                    <label for="job-outputLanguage-input">Results Langeuage:</label>
+                    <select id="job-outputLanguage-input" class="user-mapping-select" style="height: 100%;"
+                        placeholder="Enter the output language for the job...">
+                        <option value="">Select a language</option>
+                        {% for language in outputLanguage %}
+                            <option value="{{ language }}">{{ language }}</option>
                         {% endfor %}
                     </select>
                 </div>

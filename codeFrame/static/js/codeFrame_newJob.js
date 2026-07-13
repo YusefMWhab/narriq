@@ -5,7 +5,8 @@ let method = null;
 
 let userMapping = null;
 let projectDescription = null;
-let projectCategory = null;
+let projectFieldRegion = null;
+let projectResultLanguage = null;
 
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -76,7 +77,8 @@ function uploadData_submit() {
     method = null;
     userMapping = null;
     projectDescription = null;
-    projectCategory = null;
+    projectFieldRegion = null;
+    projectResultLanguage = null;
 
     // Check Radio Buttons
     const selectedMethod = document.querySelector(
@@ -149,22 +151,45 @@ async function handleMapping() {
 
     if (method === "file") {
 
-        const df = await dfd.readExcel(
-            document.getElementById("file-input").files[0]
-        );
+        const reader = new FileReader();
+        reader.onload = function (event) {
+            try {
+                const data = new Uint8Array(event.target.result);
+                const workbook = XLSX.read(data, { type: 'array' });
+                const firstSheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[firstSheetName];
 
-        headers = df.columns;
+                rawData = XLSX.utils.sheet_to_json(worksheet, {
+                    header: 1,
+                    defval: ""
+                });
+
+                if (rawData.length > 0) {
+                    headers = rawData[0];
+                }
+            } catch (error) {
+                console.error("Error parsing Excel:", error);
+                showAlert("Error parsing Excel file. Please ensure it's a valid .xlsx file.", "warning");
+            }
+        };
+
+        const file = document.getElementById("file-input").files[0];
+        if (file) {
+            reader.readAsArrayBuffer(file);
+        } else {
+            showAlert("Please select a file first.", "warning");
+        }
 
         // Show the column number input field
         numberInputField.style.display = "flex";
 
         // listen for number change
-
         numberInput.addEventListener("input", () => {
 
             const count = parseInt(numberInput.value);
 
             if (!count || count <= 0) return;
+            if (headers.length === 0) return;
 
             File_renderMapping(headersFields, headers, count);
         });
@@ -187,7 +212,9 @@ async function handleMapping() {
 
         // Reset UI 
 
-        document.getElementById("job-category-input").value = "";
+        document.getElementById("job-regionField-input").value = "";
+        document.getElementById("job-outputLanguage-input").value = "";
+
         document.getElementById("job-desc-input").value = "";
 
         document.getElementById("num-columns-input").value = "";
@@ -251,22 +278,29 @@ async function startProcess() {
 
 
     const mapColumns_submitBtn = document.getElementById("mapColumns-submitBtn");
-    
-    const jobCategory = document.getElementById("job-category-input").value;
+
+    const jobRegionFiled = document.getElementById("job-regionField-input").value;
+    const jobResultLanguage = document.getElementById("job-outputLanguage-input").value;
+
     const jobDescription = document.getElementById("job-desc-input").value.trim();
 
     const mappingData = [];
 
     // Validation
-    if (!jobCategory || !jobDescription) {
-        showAlert("Please fill Job Category and Job Description", "warning");
+    if (!jobRegionFiled || !jobDescription || !jobResultLanguage) {
+        showAlert("Please fill field region, Select result language, and project description", "warning");
         return;
     }
 
 
-
     // لو File Mapping
     if (method === "file") {
+
+        const colNumber = document.getElementById("num-columns-input").value
+        if (!colNumber || colNumber === 0) {
+            showAlert("Please Enter number of the requred columns", "warning");
+            return;
+        }
 
         const mappingRows = document.querySelectorAll(".file-mapping-row");
 
@@ -319,20 +353,11 @@ async function startProcess() {
         mapColumns_submitBtn.innerText = "Processing...";
 
         userMapping = mappingData;
-        projectCategory = jobCategory;
+        projectFieldRegion = jobRegionFiled;
+        projectResultLanguage = jobResultLanguage;
         projectDescription = jobDescription;
 
-
         // Prepare data to send to backend
-
-        const payload = {
-            dataFile,
-            method,
-            projectCategory,
-            projectDescription,
-            userMapping
-        };
-
         try {
 
             const formData = new FormData();
@@ -343,7 +368,8 @@ async function startProcess() {
             // normal data
             formData.append("method", method);
 
-            formData.append("projectCategory", projectCategory);
+            formData.append("projectFieldRegion", projectFieldRegion);
+            formData.append("projectResultLanguage", projectResultLanguage);
 
             formData.append("projectDescription", projectDescription);
 
@@ -368,7 +394,7 @@ async function startProcess() {
                 setTimeout(() => {
                     window.location.reload();
                 }, 4000);
-                        } 
+            }
             else {
                 mapColumns_submitBtn.disabled = false;
                 mapColumns_submitBtn.innerText = "Start Process";

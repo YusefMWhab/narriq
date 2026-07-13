@@ -1,0 +1,10 @@
+{
+    "fieldRegion": {
+        "Egypt":"Egyptian Arabic العامية المصرية",
+        "Saudi Arabia":"Gulf Arabic العربية الخليجية",
+        "Jordan":"Levantine Arabic العربية الشامية",
+        "Global":"English الانجليزية"
+    },
+    
+    "outputLanguageOptions": ["Data Language", "English", "Arabic"]     
+}

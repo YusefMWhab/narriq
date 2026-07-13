@@ -13,13 +13,14 @@ def CodeFrame_StartProcess(job_id):
         job.save()
 
         method = job.inputs.get("method")
-        projectCat = job.inputs.get("project_category")
+        projectLanguage = job.inputs.get("project_language")
+        projectResultLanguage = job.inputs.get("project_resultLanguage")
         projectDesc = job.inputs.get("project_description")
         userMapping = job.inputs.get("user_mapping")
         temp_path = job.original_file.name
         userId = job.user.id
 
-        CodeFrameService(temp_path, method, projectCat, projectDesc, userMapping, job_id=job.id)
+        CodeFrameService(temp_path, method, projectLanguage, projectResultLanguage, projectDesc, userMapping, job_id=job.id)
 
     except Exception as e:
         print(f"Error in Celery Task Execution: {str(e)}")
@@ -30,14 +31,15 @@ def CodeFrame_StartProcess(job_id):
             job.save()
 
 
-def CodeFrame_CreateJob(temp_path, method, projectCat, projectDesc, userMapping, userId):
+def CodeFrame_CreateJob(temp_path, method, project_Language, projectResultLanguage, projectDesc, userMapping, userId):
     try:
         user = User.objects.get(id=userId)
         user_company = user.profile.company 
         
         job_inputs = {
             "method": method,
-            "project_category": projectCat,
+            "project_language": project_Language,
+            "project_resultLanguage": projectResultLanguage,
             "project_description": projectDesc,
             "user_mapping": userMapping
         }

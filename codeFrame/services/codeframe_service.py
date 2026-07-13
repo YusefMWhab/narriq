@@ -11,13 +11,13 @@ from django.conf import settings
 
 from accounts.utils import send_user_notification
 
-from codeFrame.loaders.prompts_loader import get_map_prompt, get_split_prompt
+from codeFrame.loaders.loader import get_map_prompt, get_split_prompt
 from codeFrame.services.ai_service import API_Service_extract_codes, API_Service_mapping, API_Service_Embedding
 from codeFrame.services.textProcess import normalize_text
 from codeFrame.models import CodeFrame_AnalysisJob, CodeFrame_AnalysisResult, CodeFrame_CompanyUsageQuota
 
 # Main Service Function to handle the entire workflow of CodeFrame
-def CodeFrameService(temp_path, method, projectCat, projectDesc, userMapping, job_id):
+def CodeFrameService(temp_path, method, projectLanguage, projectResultLanguage, projectDesc, userMapping, job_id):
 
     print(f"Starting CodeFrameService for Job ID: {job_id}")
     # Prepare job data
@@ -36,7 +36,8 @@ def CodeFrameService(temp_path, method, projectCat, projectDesc, userMapping, jo
     job_data = {
         "data": data_df,
         "method": method,
-        "projectCategory": projectCat,
+        "projectLanguage": projectLanguage,
+        "projectResultLanguage": projectResultLanguage,
         "projectDescription": projectDesc,
         "userMapping": userMapping,
     }
@@ -53,10 +54,10 @@ def CodeFrameService(temp_path, method, projectCat, projectDesc, userMapping, jo
     processed_responses = int(job_data["data"][selected_columns].count().sum())
 
     # 1. Call the function to prepare data 
-    task_list = CodeFrame_PrepareData(job_data)
+    task_list, language, result_language, Split_prompt, Map_Prompt = CodeFrame_PrepareData(job_data)
 
     # 2. Call the function to manage data and get the final output
-    final_output, msg = CodeFrame_DataManagement(task_list)
+    final_output, msg = CodeFrame_DataManagement(task_list, language, result_language, Split_prompt, Map_Prompt)
 
 
     meta_data["total_rows"] = len(job_data["data"])
@@ -72,12 +73,13 @@ def CodeFrameService(temp_path, method, projectCat, projectDesc, userMapping, jo
 # This Function is responsible for preparing the data of all selected columns
 def CodeFrame_PrepareData(job_data):
     # 1. Get Data from UI
-    selected_category = job_data["projectCategory"]
+    data_language = job_data["projectLanguage"]
+    result_language = job_data["projectResultLanguage"]
     project_description = job_data["projectDescription"]
     
     # 2. Get Prompt for this Category
-    Split_prompt = get_split_prompt(selected_category)
-    Map_Prompt = get_map_prompt(selected_category)
+    Split_prompt = get_split_prompt()
+    Map_Prompt = get_map_prompt()
     
     # 3. Extract IDs
     ids = job_data["data"]["id"].tolist()
@@ -88,7 +90,7 @@ def CodeFrame_PrepareData(job_data):
     # 5. Get selected Column and its arabic header
     for item in job_data["userMapping"]:
         column_name = item['column']
-        arabic_header = item['description']
+        column_header = item['description']
         
         # Get the Data from the Original DF
         column_data = job_data["data"][column_name].fillna("").astype(str).tolist()
@@ -97,72 +99,91 @@ def CodeFrame_PrepareData(job_data):
         task_info = {
             "id": ids,
             "column_name": column_name,
-            "arabic_description": arabic_header,
+            "column_description": column_header,
             "data": column_data,
-            "category": selected_category,
             "project_context": project_description,
-            "split_prompt": Split_prompt,
-            "map_prompt": Map_Prompt
         }
         
         prepared_tasks.append(task_info)
     
-    return prepared_tasks
+    return prepared_tasks, data_language, result_language, Split_prompt, Map_Prompt
 
 # This function extract each cell in each column and send it to API_Service_extract_codes(text, project_description, question_description, prompt_template)
-def CodeFrame_DataManagement(tasks_list):
+def CodeFrame_DataManagement(tasks_list, data_language, result_language, Split_prompt, Map_Prompt):
     
     SplitResults_All = []
     sheet_data = {}
     row_mapping = []
     
+    BATCH_SIZE = 25
     for task in tasks_list:
         
         df = pd.DataFrame()
 
         col_name = task["column_name"]
         data_to_process = task["data"]
-        split_prompt = task["split_prompt"]
-        map_prompt = task["map_prompt"]
         project_description = task["project_context"]
-        question_description = task["arabic_description"]
+        question_description = task["column_description"]
         
         df["id"] = task["id"]
         df["Text"] = data_to_process 
 
-        total_rows = len(data_to_process)
 
-        Split_results = []
-        for i, text in enumerate(data_to_process):
-                        
-                
+        Split_results = [None] * len(data_to_process)
+        texts_needing_api = []
+
+        for i, text in enumerate(data_to_process):                
             clean_text = str(text) if text is not None else ""    
             normalized_text = normalize_text(clean_text)
             
-            # Check for no data or nothing
             if normalized_text == "":
-                Split_results.append([])
+                Split_results[i] = []
             
-            elif normalized_text in ["لا يوجد", "لا بوجد", "لايوجد", "لابوجد", "لا", "لا شي", "لا شئ", "لا شى", "لاشي", "لاشئ", "لاشى", "مفيش", "مافيش"]:
-                Split_results.append(["لا يوجد"])
+            elif normalized_text in ["لا يوجد", "لا بوجد", "لايوجد", "لابوجد", "لا", "لا شي",
+                                    "لا شئ", "لا شى", "لاشي", "لاشئ", "لاشى", "مفيش", "مافيش",
+                                    "No thing", "nothing", "no thing", "no", "not", "NOTHING", "NO THING"]:
+                if result_language != "English":
+                    Split_results[i] = ["لا يوجد"]
+                else:
+                    Split_results[i] = ["Nothing"]
             
             else:
-                result = API_Service_extract_codes(clean_text, project_description, question_description, split_prompt)
-                Split_results.append(result) 
+                texts_needing_api.append((i, clean_text))
 
-        df["Split Results"] = [", ".join(map(str, x)) for x in Split_results]        
+        if texts_needing_api:
+            for batch_start in range(0, len(texts_needing_api), BATCH_SIZE):
+                
+                batch = texts_needing_api[batch_start : batch_start + BATCH_SIZE]
+                batch_indices = [item[0] for item in batch]
+                batch_texts   = [item[1] for item in batch]
+
+                batch_results = API_Service_extract_codes(
+                    batch_texts,
+                    project_description,
+                    question_description,
+                    Split_prompt,
+                    data_language,
+                    result_language
+                )
+                
+                for original_idx, result in zip(batch_indices, batch_results):
+                    Split_results[original_idx] = result
+
+        Split_results = [r if r is not None else [] for r in Split_results]
+
+        df["Split Results"] = [", ".join(map(str, x)) for x in Split_results]       
         
         sheet_data[col_name] = df
         
         for row_idx, row in enumerate(Split_results):
             SplitResults_All.append(row)
-            row_mapping.append((col_name, row_idx))  # بدل Split_results
+            row_mapping.append((col_name, row_idx))
         
             
     simplified_tags, tags_to_send_llm = CodeFrame_SimplifyTagsForLLM(SplitResults_All) # using cross and bi encoder
 
     
-    AI_map_results = API_Service_mapping(tags_to_send_llm, project_description, question_description, map_prompt)
+    AI_map_results = API_Service_mapping(tags_to_send_llm, project_description, question_description, Map_Prompt, data_language, result_language)
     
     
     final_text, final_ids, codebook = CodeFrame_FinalizeMappingAndCodesList(simplified_tags, AI_map_results)
